@@ -37,4 +37,12 @@ fn main() {
     //println!("uninit_var = {}", uninit_var); error: use of an init variable
     uninit_var = 231.2;
     println!("already initialized uninit_var = {}", uninit_var);
+
+    // type casting
+    let a_integer = 0x40_u8;
+    let a_char = a_integer as char;
+    println!("char cast from integer {}: {}", a_integer, a_char);
+    
+    let a_float = 8.45511;
+    println!("integer cast from float {}: {}", a_float, a_float as i32);
 }
