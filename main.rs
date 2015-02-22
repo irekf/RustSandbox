@@ -13,4 +13,28 @@ fn main() {
     // TODO find out why this doesn't work:
     //println!("{0:08X}, {0:08x}", 7661);
 
+    // variables
+    let integer = 3i32;
+    let floatingPoint = 2.1137;
+
+    let mut uInteger = 3u32;
+    //integer += 1; error: an immutable variable
+    uInteger += 1;
+
+    println!("{}, {}, {}", integer, floatingPoint, uInteger);
+    // TODO find out why snake case instead of camel case
+
+    // shadowing
+    let first_var = 4;
+    {
+        let first_var = 51;
+        println!("first_var = {}", first_var);
+    }
+    println!("first_var = {}", first_var);
+
+    // unitialized variables
+    let uninit_var;
+    //println!("uninit_var = {}", uninit_var); error: use of an init variable
+    uninit_var = 231.2;
+    println!("already initialized uninit_var = {}", uninit_var);
 }
