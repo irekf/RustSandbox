@@ -105,5 +105,25 @@ fn main() {
             println!("for loop iteration #{}", n);
         }
 
+        // matching
+        let age = 19;
+        match age {
+            1  => println!("Seems like 1"),
+            5  => println!("It's 5"),
+            18 => println!("Exactly 18!"),
+            _  => println!("I couldn't guess :("),
+        }
 
+        match age {
+            a if a > 1 && a <= 9  => println!("The age is in range [1,9]"),
+            a if a > 9 && a <= 19 => println!("The age is in range [10, 19]"),
+            _                     => println!("Nothing, I don't know what range the age is in :("),
+        }
+
+        // the previous match is equivalent to the following:
+        match age {
+            a @ 1...9   => println!("The age is in range [1,9]"),
+            a @ 10...19 => println!("The age is in range [10, 19]"),
+            a           => println!("Nothing, I don't know what range the age is in :("),
+        }
 }
