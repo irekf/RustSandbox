@@ -45,4 +45,65 @@ fn main() {
     
     let a_float = 8.45511;
     println!("integer cast from float {}: {}", a_float, a_float as i32);
+    
+    println!("Binary represntation of {}: {:08b}", -1_i8, -1_i8);
+    println!("Binary represntation of {}: {:08b}", -2_i8, -2_i8);
+
+    // aliases
+    type FloatingPoint32 = f32;
+    let a_float_2 : FloatingPoint32 = 3 as f32;
+    println!("Type alias: {}, size of var {}", a_float_2, std::mem::size_of_val(&a_float_2));
+
+    // expressions
+    let expr = {
+        let x = 4.09;
+        let y = 1.28;
+        println!("x = {}, y = {}", x, y);
+        x / y
+    };
+    println!("expr = {}", expr);
+
+    // if-statement (every if-statement is an expression too, which is really a cool thing)
+    let speed = 10;
+    let mass = 890;
+    let consumption =
+        if speed < 0 {
+            -1.0
+        }
+        else if speed == 0 {
+            0.8
+        }
+        else if speed > 0 && speed < 10 {
+            18.52
+        }
+        else if speed >= 10 && speed < 30 {
+            let x = mass / speed;
+            (x as f32) * 0.05
+        }
+        else {
+            11.71
+        };
+        println!("Speed = {}, consumption = {}", speed, consumption);
+
+        // loop
+        let mut count = 0u32;
+        loop {
+            println!("loop iteration #{}", count);
+            count += 1;
+            if count > 9 {
+            break;
+            }
+        }
+
+        count = 0;
+        while count < 10 {
+            println!("while loop iteration #{}", count);
+            count += 1;
+        }
+
+        for n in 0u32..10 {
+            println!("for loop iteration #{}", n);
+        }
+
+
 }
