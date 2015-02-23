@@ -126,4 +126,15 @@ fn main() {
             a @ 10...19 => println!("The age is in range [10, 19]"),
             a           => println!("Nothing, I don't know what range the age is in :("),
         }
+
+        // if let
+        let a_some = Some(0.0008);
+        if let Some(i) = a_some {
+            println!("a_some is not None, {}", i);
+            println!("result {}",  9.0 / i);
+        }
+        else {
+            println!("None");
+        }
+
 }
