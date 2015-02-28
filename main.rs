@@ -1,4 +1,20 @@
 
+// modules
+mod simple_functions {
+    pub fn print_hello_world() {
+        println!("Hello, World! (from the simple_functions module)");
+     }
+
+    // nested modules
+    pub mod simple_math {
+        pub fn multiple_two_integers(a: i32, b: i32) -> i32 {
+            a * b
+        }
+    }
+}
+
+use simple_functions::simple_math::multiple_two_integers;
+
 fn main() {
 
     // formatted output
@@ -156,27 +172,13 @@ fn main() {
         let result_of_addition = add_two_integers(first_integer, second_integer);
         println!("{} + {} = {}", first_integer, second_integer, result_of_addition); 
 
-        // modules
-        mod simple_functions {
-            pub fn print_hello_world() {
-                println!("Hello, World! (from the simple_functions module)");
-            }
-
-            // nested modules
-            pub mod simple_math {
-                pub fn multiple_two_integers(a: i32, b: i32) -> i32 {
-                    a * b
-                }
-            }
-        }
 
         simple_functions::print_hello_world();
         let mul_result = simple_functions::simple_math::multiple_two_integers(3, 15);
         println!("Modules: multiplication result = {}", mul_result);
 
         // this doesn't work.. why?
-        //use simple_functions::simple_math::multiple_two_integers;
-        //println!("Modules: multiplication result 2 = {}", multiple_two_integers(-1, 8));
+        println!("Modules: multiplication result 2 = {}", multiple_two_integers(-1, 8));
 }
 
 fn add_two_integers(a: i32, b: i32) -> i32 {
