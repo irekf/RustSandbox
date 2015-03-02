@@ -15,6 +15,42 @@ mod simple_functions {
 
 use simple_functions::simple_math::multiple_two_integers;
 
+fn print_some_msg() {
+    println!("Modules: printing from the outer function");
+}
+
+mod sample_module {
+
+    pub fn call_sample_module() {
+        use second_module::print_some_msg as print_second;
+        use self::second_module::print_some_msg as print_second_sample; 
+        use super::print_some_msg as print_outside;
+        print_outside();
+        print_second();
+        print_some_msg();
+        print_second_sample();
+    }
+    
+    mod second_module {
+    
+        pub fn print_some_msg() {
+            println!("Modules: printing from the second module inside the sample module");
+        }    
+
+    }
+
+    fn print_some_msg() {
+        println!("Modules: printing from the inside of the sample module");
+    }
+
+}
+
+mod second_module {
+    pub fn print_some_msg() {
+        println!("Modules: printing from the second module");
+    }
+}
+
 fn main() {
 
     // formatted output
@@ -179,6 +215,9 @@ fn main() {
 
         // this doesn't work.. why?
         println!("Modules: multiplication result 2 = {}", multiple_two_integers(-1, 8));
+
+        // "super" and "self"
+        sample_module::call_sample_module();
 }
 
 fn add_two_integers(a: i32, b: i32) -> i32 {
