@@ -31,13 +31,13 @@ fn main() {
 
     // variables
     let integer = 3i32;
-    let floatingPoint = 2.1137;
+    let floating_point = 2.1137;
 
-    let mut uInteger = 3u32;
+    let mut u_integer = 3u32;
     //integer += 1; error: an immutable variable
-    uInteger += 1;
+    u_integer += 1;
 
-    println!("{}, {}, {}", integer, floatingPoint, uInteger);
+    println!("{}, {}, {}", integer, floating_point, u_integer);
     // TODO find out why snake case instead of camel case
 
     // shadowing
@@ -138,9 +138,9 @@ fn main() {
 
         // the previous match is equivalent to the following:
         match age {
-            a @ 1...9   => println!("The age is in range [1,9]"),
-            a @ 10...19 => println!("The age is in range [10, 19]"),
-            a           => println!("Nothing, I don't know what range the age is in :("),
+            a @ 1...9   => println!("The age is {} and in range [1,9]", a),
+            a @ 10...19 => println!("The age is {} and in range [10, 19]", a),
+            a           => println!("Nothing, I don't know what range the age {} is in :(", a),
         }
 
         // if let
