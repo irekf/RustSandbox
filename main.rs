@@ -51,6 +51,8 @@ mod second_module {
     }
 }
 
+mod modules;
+
 fn main() {
 
     // formatted output
@@ -218,6 +220,13 @@ fn main() {
 
         // "super" and "self"
         sample_module::call_sample_module();
+
+        // file hierarchy
+        {
+            let a : i32 = 4;
+            let b : i32 = 15;
+            println!("modules::math {} + {} = {}", a, b, modules::math::add_two_int(a, b));
+        }
 }
 
 fn add_two_integers(a: i32, b: i32) -> i32 {
