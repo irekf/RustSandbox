@@ -1,3 +1,5 @@
+// library
+extern crate my_extern_lib;
 
 // modules
 mod simple_functions {
@@ -227,6 +229,10 @@ fn main() {
             let b : i32 = 15;
             println!("modules::math {} + {} = {}", a, b, modules::math::add_two_int(a, b));
         }
+
+        // call external library
+        my_extern_lib::run(5);
+
 }
 
 fn add_two_integers(a: i32, b: i32) -> i32 {
