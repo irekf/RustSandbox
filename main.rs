@@ -233,7 +233,35 @@ fn main() {
         // call external library
         my_extern_lib::run(5);
 
+        // tuples
+        let pair = ("key", 4);
+        println!("tuple value: ({}, {})", pair.0, pair.1);
+        println!("tuple value: {:?}", pair);
+
+        // structs
+        let bmw: Car = Car {color: "Blue".to_string(), weight: 940};
+        println!("BMW: {} - {}", bmw.color, bmw.weight);
+
+        // tuple structs
+        let color_1: RgbColor = RgbColor(123, 33, 81);
+        println!("RGB color: {}, {}, {}", color_1.0, color_1.1, color_1.2);
+
+        // unit structs
+        let _nil = Nil;
+
 }
+
+// a C-like struct
+struct Car {
+    color: String,
+    weight: u32,
+}
+
+// a tuple struct s
+struct RgbColor(i8, i8, i8);
+
+// a unit struct
+struct Nil;
 
 fn add_two_integers(a: i32, b: i32) -> i32 {
     a + b
