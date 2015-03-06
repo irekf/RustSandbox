@@ -249,6 +249,9 @@ fn main() {
         // unit structs
         let _nil = Nil;
 
+        // a struct with a constructor and getter
+        let rabbit = my_extern_lib::Animal::new(2, 4, "The King");
+        println!("Rabbit: {}, {}, {}", rabbit.age, rabbit.weight, rabbit.get_secret_info()); 
 }
 
 // a C-like struct
