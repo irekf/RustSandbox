@@ -252,6 +252,27 @@ fn main() {
         // a struct with a constructor and getter
         let rabbit = my_extern_lib::Animal::new(2, 4, "The King");
         println!("Rabbit: {}, {}, {}", rabbit.age, rabbit.weight, rabbit.get_secret_info()); 
+
+        // generics
+        {
+            struct ThreeValues<T, U, V> {
+                first: T,
+                second: U,
+                third: V,
+            }
+
+            let three_values = ThreeValues { first: 4, second: 2.01, third: "hello" };
+            println!("Generic data structure: {}, {}, {}", three_values.first, three_values.second, three_values.third);
+
+            // generic function
+            fn swap<U, V>(first_value: U, second_value: V) -> (V, U) {
+                (second_value, first_value)
+            }
+
+            let random_tuple = swap(4, 2);
+            println!("Use unused variables: {} {}", random_tuple.0, random_tuple.1);
+
+        } 
 }
 
 // a C-like struct
