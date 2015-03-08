@@ -272,7 +272,22 @@ fn main() {
             let random_tuple = swap(4, 2);
             println!("Use unused variables: {} {}", random_tuple.0, random_tuple.1);
 
-        } 
+        }
+
+        // box (heap allocation)
+        {
+
+            let toyota: Car = Car {color: "Green".to_string(), weight: 1040,};
+            let porche: Box<Car> = Box::new(Car {color: "Black".to_string(), weight: 876, });
+
+            println!("Toyota's size on stack is {}", std::mem::size_of_val(&toyota));
+            println!("Boxed porche's size on stack is {}", std::mem::size_of_val(&porche));
+
+            let unboxed_porche: Car = *porche;
+            println!("Unboxed porche's size on stack is {}", std::mem::size_of_val(&unboxed_porche));
+
+        }
+
 }
 
 // a C-like struct
