@@ -286,6 +286,23 @@ fn main() {
             let unboxed_porche: Car = *porche;
             println!("Unboxed porche's size on stack is {}", std::mem::size_of_val(&unboxed_porche));
 
+            // ownership
+            let bmw : Box<Car> = Box::new(Car {color: "Yellow".to_string(), weight: 1620});
+            println!("Boxed BMW at {:p}: {}/{}", &bmw, bmw.color, bmw.weight);
+            let moved_bmw: Box<Car> = bmw;
+            println!("Moved BMW at {:p}: {}/{}", &moved_bmw, moved_bmw.color, moved_bmw.weight);
+            // can't do the following, the ownership has been moved
+            // println!("Boxed BMW at {:p}: {}/{}", &bmw, bmw.color, bmw.weight);
+
+            // mutability
+            let immutable_car = Box::new(Car {color: "Pink".to_string(), weight: 510});
+            // can't do this
+            // immutable_car.weight = 403;
+
+            // but we can change mutability
+            let mut mutable_car = immutable_car;
+            mutable_car.weight = 401;
+
         }
 
 }
