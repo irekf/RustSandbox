@@ -305,6 +305,28 @@ fn main() {
 
         }
 
+        // ref
+        {
+
+            let mut bmw: Car = Car {color: "Green".to_string(), weight: 870};
+            println!("Ref: bmw {},{}", bmw.color, bmw.weight);
+
+            {
+                let Car {color: _, weight: ref weight_reference} = bmw;
+
+                println!("Ref: {}", *weight_reference);
+            }
+
+            {
+                let Car {color: _, weight: ref mut weight_mut_ref} = bmw;
+
+                *weight_mut_ref = 200;
+            }
+
+            println!("Ref: bmw {},{}", bmw.color, bmw.weight);
+
+        }
+
 }
 
 // a C-like struct
