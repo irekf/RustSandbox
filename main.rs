@@ -327,6 +327,35 @@ fn main() {
 
         }
 
+        // try some enums
+        {
+
+            enum TwoValues {
+                First(i8),
+                Second(f32),
+            }
+
+            fn test_enum(some_number: i32) -> TwoValues {
+
+                if some_number > 0 {
+                    TwoValues::First(231)
+                }
+                else {
+                    TwoValues::Second(3.09)
+                }
+
+            }
+
+            match test_enum(-2) {
+                TwoValues::First(value) => println!("TwoValues enum: {}", value),
+                TwoValues::Second(value) => println!("TwoValues enum: {}", value),
+            }
+
+            let two_values_instance = TwoValues::First(9);
+            println!("TwoValues enum: size of a variant {}", std::mem::size_of_val(&two_values_instance));
+
+        }
+
 }
 
 // a C-like struct
