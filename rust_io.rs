@@ -1,25 +1,20 @@
+#![feature(env)]
+#![feature(fs)]
+#![feature(io)]
+#![feature(old_path)]
+
 use std::io::prelude::*; // imports all the io related stuff altogether
 use std::fs::File; // imports the File struct which holds information about a file
 use std::env;
 
 fn main() {
 
-    // Get the second argument in an ugly way... 
-    // but it's a way to get to know iterators, Option etc
-    let mut args: env::Args = env::args();
-    args.next();
-    let first_argument = match args.next() {
+    let args: Vec<String> = env::args().collect(); 
+    for idx in 0..args.len() {
+        println!("argument #{}: {}", idx, args[idx]);
+    }
 
-        Some(argument_value) => {
-            println!("Second argument passed: {}", argument_value);
-            argument_value
-        },
-
-        None => panic!("Only one argument passed!"),
-
-    };
-
-    let path: Path = Path::new(first_argument); // creates a path to our file
+    let path: Path = Path::new(&args[1]); // creates a path to our file
     let display = path.display(); // for safely printing paths
 
     let mut input_file: File = match File::open(&path) {
