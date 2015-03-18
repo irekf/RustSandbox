@@ -338,7 +338,7 @@ fn main() {
             fn test_enum(some_number: i32) -> TwoValues {
 
                 if some_number > 0 {
-                    TwoValues::First(231)
+                    TwoValues::First(120)
                 }
                 else {
                     TwoValues::Second(3.09)
@@ -356,6 +356,33 @@ fn main() {
 
         }
 
+        // closures
+        {
+            let say = |phrase: String| {println!("{}", phrase)};
+            say("Hello, closure!".to_string()); // this is probably worse than just println!
+
+            fn mutate_integer<F: Fn(i32) -> i32>(value: i32, mutator: F) -> i32 {
+                mutator(value)
+            }
+
+            let modulo_three = |v: i32| {v % 3};
+
+            let value: i32 = 23;
+            println!("Closures: input value = {}, result = {}", value, mutate_integer(value, modulo_three));
+
+            let add_five = |v: u32| {v + 5};
+            let mul_ten = |v: u32| {v * 10};
+
+            fn mutate_integer_2<F, G>(value: u32, mutator_1: F, mutator_2: G) -> u32
+                where F: Fn(u32) -> u32, G: Fn(u32) -> u32 {
+                
+                mutator_2(mutator_1(value))
+
+            }
+
+            let value_2: u32 = 7194682;
+            println!("Closures #2: input value = {}, result = {}", value_2, mutate_integer_2(value_2, add_five, mul_ten));
+        }      
 }
 
 // a C-like struct
