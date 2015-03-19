@@ -388,6 +388,8 @@ fn main() {
         {
             use std::thread;
             use std::old_io::timer;
+            use std::sync::mpsc;
+            use std::old_io;
             use std::time::Duration;            
             
             // without a guard
@@ -412,6 +414,21 @@ fn main() {
 
             }
             timer::sleep(Duration::milliseconds(2500));
+
+            // channels
+
+            let (tx, rx) = mpsc::channel();
+
+            thread::spawn(move || {
+                for idx in 10..20 {
+                    tx.send(old_io::stdin().read_line().ok().expect("failed to read line"));
+                }
+            });
+
+            for _ in 0..5 {
+                println!("Got value {:?} from another thread", rx.recv().unwrap());
+            }
+            
         }
 }
 
