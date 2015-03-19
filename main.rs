@@ -383,6 +383,36 @@ fn main() {
             let value_2: u32 = 7194682;
             println!("Closures #2: input value = {}, result = {}", value_2, mutate_integer_2(value_2, add_five, mul_ten));
         }      
+
+        // threads
+        {
+            use std::thread;
+            use std::old_io::timer;
+            use std::time::Duration;            
+            
+            // without a guard
+            thread::spawn(|| {
+                println!("Very first thread EEEEEEYYYYYEEEECCCCAAAAAAATTTCCCHHHEEEERRR!!!");
+            });
+            timer::sleep(Duration::milliseconds(50)); // we need it because main terminates and kills all the threads
+            
+            // with a guard
+            let thread_guard = thread::scoped(|| {
+                println!("Thread with a guard here!!");
+            });
+
+            // another example
+            for i in range(0, 16) {
+
+                thread::spawn(move || {
+                    println!("Thread #{} started", i);
+                    timer::sleep(Duration::milliseconds(500 % (i + 1)));
+                    println!("Thread #{} finished", i);
+                });
+
+            }
+            timer::sleep(Duration::milliseconds(2500));
+        }
 }
 
 // a C-like struct
