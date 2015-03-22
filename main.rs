@@ -1,3 +1,6 @@
+#![feature(std_misc)]
+#![feature(thread_sleep)]
+
 // library
 extern crate my_extern_lib;
 
@@ -386,42 +389,44 @@ fn main() {
 
         // threads
         {
+            use std::io;
             use std::thread;
-            use std::old_io::timer;
             use std::sync::mpsc;
-            use std::old_io;
             use std::time::Duration;            
             
             // without a guard
             thread::spawn(|| {
                 println!("Very first thread EEEEEEYYYYYEEEECCCCAAAAAAATTTCCCHHHEEEERRR!!!");
             });
-            timer::sleep(Duration::milliseconds(50)); // we need it because main terminates and kills all the threads
+            thread::sleep(Duration::milliseconds(50)); // we need it because main terminates and kills all the threads
             
             // with a guard
-            let thread_guard = thread::scoped(|| {
+            let thread_guard: thread::JoinGuard<()> = thread::scoped(|| {
                 println!("Thread with a guard here!!");
             });
+            println!("Thread guard: {:?}", thread_guard.thread().name());
 
             // another example
-            for i in range(0, 16) {
+            for i in 0..16 {
 
                 thread::spawn(move || {
                     println!("Thread #{} started", i);
-                    timer::sleep(Duration::milliseconds(500 % (i + 1)));
+                    thread::sleep(Duration::milliseconds(500 % (i + 1)));
                     println!("Thread #{} finished", i);
                 });
 
             }
-            timer::sleep(Duration::milliseconds(2500));
+            thread::sleep(Duration::milliseconds(2500));
 
             // channels
 
             let (tx, rx) = mpsc::channel();
 
             thread::spawn(move || {
-                for idx in 10..20 {
-                    tx.send(old_io::stdin().read_line().ok().expect("failed to read line"));
+                for _ in 10..20 {
+                    let mut read_buffer: String = String::new();
+                    io::stdin().read_line(&mut read_buffer).ok().expect("failed to read line");
+                    tx.send(read_buffer).unwrap();
                 }
             });
 
