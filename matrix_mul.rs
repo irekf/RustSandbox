@@ -20,7 +20,7 @@ fn main() {
         match mat_line_iterator.next() {
             Some(result) => {
                                 let mat_line = result.unwrap();
-                                let slice_iter = mat_line.as_slice().split(',')
+                                let slice_iter = mat_line.as_slice().trim_matches(',').split(',')
                                     .map(|x| {
                                                 FromStr::from_str(x).unwrap()
                                             });
