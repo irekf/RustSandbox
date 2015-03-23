@@ -4,11 +4,9 @@ use std::path::Path;
 use std::str::FromStr;
 use std::thread;
 
-fn main() {
+fn load_matrix(file_path: &Path) -> Vec<Vec<u32>> {
 
-    let mat_path = Path::new("big_matrix_1.txt");
-
-    let mat_file = File::open(&mat_path).unwrap();
+    let mat_file = File::open(file_path).unwrap();
 
     let mat_reader = BufReader::new(mat_file);
 
@@ -30,4 +28,16 @@ fn main() {
             None => break,
         }
     }
+
+    mat_content
+}
+
+fn main() {
+
+    let matrix_1: Vec<Vec<u32>> = load_matrix(Path::new("big_matrix_1.txt"));
+    let matrix_2: Vec<Vec<u32>> = load_matrix(Path::new("big_matrix_2.txt"));
+
+    println!("{}", matrix_1[3][10]);
+    println!("{}", matrix_2[72][0]);
+
 }
