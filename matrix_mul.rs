@@ -35,6 +35,31 @@ fn load_matrix(file_path: &Path) -> Vec<Vec<u32>> {
     mat_content
 }
 
+fn single_thread_mul(m1: &Vec<Vec<u32>>, m2: &Vec<Vec<u32>>) -> Vec<Vec<u32>> {
+
+    let mut result: Vec<Vec<u32>> = Vec::new();
+    let mul_length = m2.len();
+
+    for y in 0..m1.len() {
+
+        let mut result_row: Vec<u32> = Vec::new();
+        let mut entry_value: u32 = 0;
+
+        for x in 0..m2[0].len() {
+
+            for i in 0..mul_length { 
+                entry_value += m1[y][i] * m2[i][x];
+            }
+
+            result_row.push(entry_value);
+        }
+
+        result.push(result_row);
+    }
+
+    result
+}
+
 fn main() {
 
     let args: Vec<String> = env::args().collect();
@@ -43,30 +68,12 @@ fn main() {
         return;
     }
 
-    let matrix_1: Vec<Vec<u32>> = load_matrix(Path::new(&args[1]));
-    let matrix_2: Vec<Vec<u32>> = load_matrix(Path::new(&args[2]));
+    let m1: Vec<Vec<u32>> = load_matrix(Path::new(&args[1]));
+    let m2: Vec<Vec<u32>> = load_matrix(Path::new(&args[2]));
 
-    assert!(matrix_1[0].len() == matrix_2.len());
+    assert!(m1[0].len() == m2.len());
 
-    let mut result: Vec<Vec<u32>> = Vec::new();
-    let mul_length = matrix_2.len();
-
-    for y in 0..matrix_1.len() {
-
-        let mut result_row: Vec<u32> = Vec::new();
-        let mut entry_value: u32 = 0;
-
-        for x in 0..matrix_2[0].len() {
-
-            for i in 0..mul_length { 
-                entry_value += matrix_1[y][i] * matrix_2[i][x];
-            }
-
-            result_row.push(entry_value);
-        }
-
-        result.push(result_row);
-    }
+    let result: Vec<Vec<u32>> = single_thread_mul(&m1, &m2);
 
     for y in 0..result.len() {
         for x in 0..result[0].len() {
