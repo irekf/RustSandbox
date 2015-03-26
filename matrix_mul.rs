@@ -70,8 +70,10 @@ fn multi_thread_mul(m1: Vec<Vec<u32>>, m2: Vec<Vec<u32>>, thread_num: usize) -> 
     let shared_m1 = Arc::new(m1);
     let shared_m2 = Arc::new(m2);
 
+    // is there a better way to initialize a vector?
     let mut result: Vec<Vec<u32>> = Vec::with_capacity(rows_to_process);
     result.resize(rows_to_process, Vec::new());
+
     let mul_length = shared_m2.len();
 
     let shared_result = Arc::new(Mutex::new(result));
@@ -114,6 +116,8 @@ fn multi_thread_mul(m1: Vec<Vec<u32>>, m2: Vec<Vec<u32>>, thread_num: usize) -> 
                 child_result[y] = result_row;
             }
 
+            println!("thread #{} finished", thread_idx);
+
         });
 
         threads.push(join_handle);
@@ -123,6 +127,7 @@ fn multi_thread_mul(m1: Vec<Vec<u32>>, m2: Vec<Vec<u32>>, thread_num: usize) -> 
         let _ = t.join();
     }
 
+    // could it be more straightforward? put this mutex guard and the threads in a separate block?
     let guard = shared_result.lock().unwrap();
     guard.deref().clone()
 }
@@ -140,8 +145,8 @@ fn main() {
 
     assert!(m1[0].len() == m2.len());
 
-    let result: Vec<Vec<u32>> = single_thread_mul(&m1, &m2);
-
+    //let result: Vec<Vec<u32>> = single_thread_mul(&m1, &m2);
+/*
     for y in 0..result.len() {
         for x in 0..result[y].len() {
             print!("{},", result[y][x]);
@@ -149,13 +154,14 @@ fn main() {
         print!("\n");
     }
 
-
-    let result: Vec<Vec<u32>> = multi_thread_mul(m1, m2, 2);
-
+*/
+    let result: Vec<Vec<u32>> = multi_thread_mul(m1, m2, 100);
+/*
     for y in 0..result.len() {
         for x in 0..result[y].len() {
             print!("{},", result[y][x]);
         }
         print!("\n");
     }
+*/
 }
