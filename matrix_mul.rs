@@ -3,8 +3,10 @@
 use std::env;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
+use std::ops::Deref;
 use std::path::Path;
 use std::str::FromStr;
+use std::sync::{Arc, Mutex};
 use std::thread;
 
 fn load_matrix(file_path: &Path) -> Vec<Vec<u32>> {
@@ -60,6 +62,71 @@ fn single_thread_mul(m1: &Vec<Vec<u32>>, m2: &Vec<Vec<u32>>) -> Vec<Vec<u32>> {
     result
 }
 
+fn multi_thread_mul(m1: Vec<Vec<u32>>, m2: Vec<Vec<u32>>, thread_num: usize) -> Vec<Vec<u32>> {
+
+    let rows_to_process = m1.len();
+    let rows_per_thread = rows_to_process / thread_num;
+
+    let shared_m1 = Arc::new(m1);
+    let shared_m2 = Arc::new(m2);
+
+    let mut result: Vec<Vec<u32>> = Vec::with_capacity(rows_to_process);
+    result.resize(rows_to_process, Vec::new());
+    let mul_length = shared_m2.len();
+
+    let shared_result = Arc::new(Mutex::new(result));
+
+    let mut threads = vec![];
+    for thread_idx in 0..thread_num {
+
+        let child_m1 = shared_m1.clone();
+        let child_m2 = shared_m2.clone();
+        let child_result = shared_result.clone();
+
+        let join_handle = thread::spawn(move || {
+
+            let start_row_idx = thread_idx * rows_per_thread;
+            let end_row_idx =
+                if start_row_idx + rows_per_thread < rows_to_process - 1 {
+                    start_row_idx + rows_per_thread
+                }
+                else {
+                    rows_to_process
+                };
+
+            println!("thread #{}: start={}, end={}", thread_idx, start_row_idx, end_row_idx);
+
+            for y in start_row_idx..end_row_idx {
+
+                let mut result_row: Vec<u32> = Vec::new();
+                let mut entry_value: u32 = 0;
+
+                for x in 0..child_m2[0].len() {
+
+                    for i in 0..mul_length {
+                        entry_value += child_m1[y][i] * child_m2[i][x];
+                    }
+
+                    result_row.push(entry_value);
+                }
+
+                let mut child_result = child_result.lock().unwrap();
+                child_result[y] = result_row;
+            }
+
+        });
+
+        threads.push(join_handle);
+    }
+
+    for t in threads {
+        let _ = t.join();
+    }
+
+    let guard = shared_result.lock().unwrap();
+    guard.deref().clone()
+}
+
 fn main() {
 
     let args: Vec<String> = env::args().collect();
@@ -76,7 +143,17 @@ fn main() {
     let result: Vec<Vec<u32>> = single_thread_mul(&m1, &m2);
 
     for y in 0..result.len() {
-        for x in 0..result[0].len() {
+        for x in 0..result[y].len() {
+            print!("{},", result[y][x]);
+        }
+        print!("\n");
+    }
+
+
+    let result: Vec<Vec<u32>> = multi_thread_mul(m1, m2, 2);
+
+    for y in 0..result.len() {
+        for x in 0..result[y].len() {
             print!("{},", result[y][x]);
         }
         print!("\n");
