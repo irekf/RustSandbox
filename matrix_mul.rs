@@ -79,14 +79,14 @@ fn multi_thread_mul(m1: Vec<Vec<u32>>, m2: Vec<Vec<u32>>, thread_num: usize) -> 
 
     let mul_length = shared_m2.len();
 
-    let shared_result = Arc::new(Mutex::new(result));
+    let shared_result = Arc::new(Mutex::new(Some(result)));
 
     let mut threads = vec![];
     for thread_idx in 0..thread_num {
 
         let child_m1 = shared_m1.clone();
         let child_m2 = shared_m2.clone();
-        let child_result = shared_result.clone();
+        let child_result_arcptr = shared_result.clone();
 
         let join_handle = thread::spawn(move || {
 
@@ -115,8 +115,14 @@ fn multi_thread_mul(m1: Vec<Vec<u32>>, m2: Vec<Vec<u32>>, thread_num: usize) -> 
                     result_row.push(entry_value);
                 }
 
-                let mut child_result = child_result.lock().unwrap();
-                child_result[y] = result_row;
+                // get the guard
+                let mut result_guard = child_result_arcptr.lock().unwrap();
+                // extract the result vector from the Option and substitute it wth a None
+                let mut child_result_vector = result_guard.take().unwrap();
+                // alter the result vector
+                child_result_vector[y] = result_row;
+                // put the vector back to the Option
+                *result_guard = Some(child_result_vector);
             }
 
             println!("thread #{} finished", thread_idx);
@@ -130,9 +136,9 @@ fn multi_thread_mul(m1: Vec<Vec<u32>>, m2: Vec<Vec<u32>>, thread_num: usize) -> 
         let _ = t.join();
     }
 
-    // could it be more straightforward? put this mutex guard and the threads in a separate block?
-    let guard = shared_result.lock().unwrap();
-    guard.deref().clone()
+    // get the guard and extract the result vector from the Option, leave a None there(take())
+    let mut guard = shared_result.lock().unwrap();
+    guard.take().unwrap()
 }
 
 fn main() {
@@ -158,7 +164,7 @@ fn main() {
     }
 
 */
-    let result: Vec<Vec<u32>> = multi_thread_mul(m1, m2, 100);
+    let result: Vec<Vec<u32>> = multi_thread_mul(m1, m2, 2);
 /*
     for y in 0..result.len() {
         for x in 0..result[y].len() {
