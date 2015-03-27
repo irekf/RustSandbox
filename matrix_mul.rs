@@ -72,7 +72,10 @@ fn multi_thread_mul(m1: Vec<Vec<u32>>, m2: Vec<Vec<u32>>, thread_num: usize) -> 
 
     // is there a better way to initialize a vector?
     let mut result: Vec<Vec<u32>> = Vec::with_capacity(rows_to_process);
-    result.resize(rows_to_process, Vec::new());
+    //result.resize(rows_to_process, Vec::new());
+    for _ in 0..rows_to_process {
+        result.push(Vec::new());
+    }
 
     let mul_length = shared_m2.len();
 
