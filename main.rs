@@ -1,5 +1,3 @@
-#![feature(std_misc)]
-#![feature(thread_sleep)]
 
 // library
 extern crate my_extern_lib;
@@ -392,13 +390,12 @@ fn main() {
             use std::io;
             use std::thread;
             use std::sync::mpsc;
-            use std::time::Duration;            
             
             // without a guard
             thread::spawn(|| {
                 println!("Very first thread EEEEEEYYYYYEEEECCCCAAAAAAATTTCCCHHHEEEERRR!!!");
             });
-            thread::sleep(Duration::milliseconds(50)); // we need it because main terminates and kills all the threads
+            thread::sleep_ms(50); // we need it because main terminates and kills all the threads
             
             // with a guard
             let thread_guard: thread::JoinGuard<()> = thread::scoped(|| {
@@ -411,12 +408,12 @@ fn main() {
 
                 thread::spawn(move || {
                     println!("Thread #{} started", i);
-                    thread::sleep(Duration::milliseconds(500 % (i + 1)));
+                    thread::sleep_ms(500 % (i + 1));
                     println!("Thread #{} finished", i);
                 });
 
             }
-            thread::sleep(Duration::milliseconds(2500));
+            thread::sleep_ms(2500);
 
             // channels
 

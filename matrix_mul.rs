@@ -1,9 +1,7 @@
-#![feature(core)]
 
 use std::env;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
-use std::ops::Deref;
 use std::path::Path;
 use std::str::FromStr;
 use std::sync::{Arc, Mutex};
@@ -23,7 +21,7 @@ fn load_matrix(file_path: &Path) -> Vec<Vec<u32>> {
         match mat_line_iterator.next() {
             Some(result) => {
                                 let mat_line = result.unwrap();
-                                let slice_iter = mat_line.as_slice().trim_matches(',').split(',')
+                                let slice_iter = mat_line.trim_matches(',').split(',')
                                     .map(|x| {
                                                 FromStr::from_str(x).unwrap()
                                             });
