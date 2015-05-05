@@ -397,11 +397,13 @@ fn main() {
             });
             thread::sleep_ms(50); // we need it because main terminates and kills all the threads
             
-            // with a guard
+            // with a guard (got unstable because of the memory leak issue #24292)
+            /*
             let thread_guard: thread::JoinGuard<()> = thread::scoped(|| {
                 println!("Thread with a guard here!!");
             });
             println!("Thread guard: {:?}", thread_guard.thread().name());
+            */
 
             // another example
             for i in 0..16 {
